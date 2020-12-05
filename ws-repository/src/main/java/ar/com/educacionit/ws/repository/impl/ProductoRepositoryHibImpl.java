@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 
 import ar.com.educacionit.ws.domain.Producto;
+import ar.com.educacionit.ws.exceptions.DuplicatedException;
+import ar.com.educacionit.ws.exceptions.GenericExeption;
 import ar.com.educacionit.ws.repository.ProductoRepository;
 import ar.com.educacionit.ws.repository.hibernate.HibernateBaseRepository;
 
@@ -17,7 +20,7 @@ public class ProductoRepositoryHibImpl extends HibernateBaseRepository implement
 		super();
 	}
 	
-	public Producto getByID(Long id) {
+	public Producto getByID(Long id) throws GenericExeption {
 				
 		Session session = factory.getCurrentSession();
 
@@ -51,9 +54,9 @@ public class ProductoRepositoryHibImpl extends HibernateBaseRepository implement
 			session.getTransaction().commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			// Rollback in case of an error occurred.
 			session.getTransaction().rollback();
+			throw new GenericExeption(e.getCause().getMessage(), e);
 		}
 		
 		return producto;
@@ -77,6 +80,27 @@ public class ProductoRepositoryHibImpl extends HibernateBaseRepository implement
 		session.getTransaction().commit();
 		
 		return productos;
+	}
+
+	public Producto insert(Producto productoACrear) throws DuplicatedException, GenericExeption {
+		
+		Session session = factory.getCurrentSession();
+		
+		session.beginTransaction();
+		
+		try {
+			session.saveOrUpdate(productoACrear);
+		}catch (ConstraintViolationException e) {
+			session.getTransaction().rollback();
+			throw new DuplicatedException(e.getCause().getMessage(), e);
+		}catch (Exception e) {
+			session.getTransaction().rollback();
+			throw new GenericExeption(e.getMessage(), e);
+		} finally {
+			session.close();
+		}
+				
+		return productoACrear;
 	}
 
 }

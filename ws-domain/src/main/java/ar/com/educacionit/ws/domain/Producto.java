@@ -24,6 +24,9 @@ public class Producto {
 	@Column(name = "precio", nullable = false)
 	private Float precio;
 	
+	@Column(name="tipo_producto", nullable = false)
+	private Long tipoProducto;
+	
 	//contructor
 	public Producto() {
 		
@@ -36,10 +39,11 @@ public class Producto {
 		this.precio = precio;
 	}
 
-	public Producto(String titulo, String codigo, Float precio) {
+	public Producto(String titulo, String codigo, Float precio, Long tipoProducto) {
 		this.titulo = titulo;
 		this.codigo = codigo;
 		this.precio = precio;
+		this.tipoProducto = tipoProducto;
 	}
 
 	public Long getId() {
@@ -76,7 +80,16 @@ public class Producto {
 
 	@Override
 	public String toString() {
-		return "Producto [id=" + id + ", titulo=" + titulo + ", codigo=" + codigo + ", precio=" + precio + "]";
+		return "Producto [id=" + id + ", titulo=" + titulo + ", codigo=" + codigo + ", precio=" + precio
+				+ ", tipoProducto=" + tipoProducto + "]";
+	}
+
+	public Long getTipoProducto() {
+		return tipoProducto;
+	}
+
+	public void setTipoProducto(Long tipoProducto) {
+		this.tipoProducto = tipoProducto;
 	}
 	
 	//alt+shit+s
