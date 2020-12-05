@@ -1,10 +1,13 @@
-package ar.com.educacionit.ws.domain;
+package ar.com.educacionit.ws.repository;
 
 import java.util.Optional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+
+import ar.com.educacionit.ws.domain.Producto;
+import ar.com.educacionit.ws.repository.hibernate.HibernateUtils;
 
 public class TestDominio {
 

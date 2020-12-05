@@ -17,5 +17,10 @@
       <artifactId>ws-repository</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>ar.com.educacionit</groupId>
+      <artifactId>ws-domain</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>

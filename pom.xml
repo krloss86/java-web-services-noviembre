@@ -17,5 +17,6 @@
     <module>ws-domain</module>
     <module>ws-repository</module>
     <module>ws-services</module>
+    <module>ws-rest-producto-server</module>
   </modules>
 </project>

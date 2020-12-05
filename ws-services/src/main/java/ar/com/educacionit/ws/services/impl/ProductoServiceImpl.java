@@ -1,5 +1,7 @@
 package ar.com.educacionit.ws.services.impl;
 
+import java.util.List;
+
 import ar.com.educacionit.ws.domain.Producto;
 import ar.com.educacionit.ws.repository.ProductoRepository;
 import ar.com.educacionit.ws.repository.impl.ProductoRepositoryHibImpl;
@@ -15,5 +17,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	public Producto obtenerProducto(Long id) {
 		return this.productoRepository.getByID(id);
+	}
+
+	public List<Producto> findProductos() {
+		return this.productoRepository.findAll();
 	}
 }

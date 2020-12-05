@@ -1,4 +1,4 @@
-package ar.com.educacionit.ws.domain;
+package ar.com.educacionit.ws.repository.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

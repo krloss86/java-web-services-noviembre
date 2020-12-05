@@ -1,21 +1,24 @@
 package ar.com.educacionit.ws.repository.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import ar.com.educacionit.ws.domain.HibernateUtils;
 import ar.com.educacionit.ws.domain.Producto;
 import ar.com.educacionit.ws.repository.ProductoRepository;
+import ar.com.educacionit.ws.repository.hibernate.HibernateBaseRepository;
 
-public class ProductoRepositoryHibImpl implements ProductoRepository {
+public class ProductoRepositoryHibImpl extends HibernateBaseRepository implements ProductoRepository {
 
+	public ProductoRepositoryHibImpl() {
+		super();
+	}
+	
 	public Producto getByID(Long id) {
-		
-		SessionFactory factory = HibernateUtils.getSessionFactory();
-		
+				
 		Session session = factory.getCurrentSession();
 
 		Producto producto = null;
@@ -54,6 +57,26 @@ public class ProductoRepositoryHibImpl implements ProductoRepository {
 		}
 		
 		return producto;
+	}
+
+	public List<Producto> findAll() {
+		
+		List<Producto> productos = new ArrayList<Producto>();
+				
+		Session session = factory.getCurrentSession();
+		
+		session.beginTransaction();
+		
+		//hql
+		String sql = "Select p from " + Producto.class.getName() + " p";
+		
+		Query<Producto> query = session.createQuery(sql);
+		
+		productos = query.getResultList();
+	
+		session.getTransaction().commit();
+		
+		return productos;
 	}
 
 }
