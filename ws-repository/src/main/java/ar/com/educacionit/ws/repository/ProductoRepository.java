@@ -15,4 +15,6 @@ public interface ProductoRepository {
 	public Producto insert(Producto productoACrear) throws DuplicatedException, GenericExeption;
 
 	public Producto deleteProducto(Long id) throws GenericExeption;
+
+	public Producto update(Producto producto) throws GenericExeption;
 }

@@ -29,7 +29,8 @@
 
 		<!-- cuales son nuestas entidades -->
 		<mapping class="ar.com.educacionit.ws.domain.Producto" />
-
+		<mapping class="ar.com.educacionit.ws.domain.User" />
+		<mapping class="ar.com.educacionit.ws.domain.Role" />
 	</session-factory>
 
 </hibernate-configuration>

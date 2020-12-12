@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,6 +29,7 @@ public class ProductoResource {
 
 	private ProductoService ps = new ProductoServiceImpl();
 	
+	@PermitAll
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findAllProductos() {
@@ -33,6 +37,7 @@ public class ProductoResource {
 		return Response.ok(productos).build();
 	}
 	
+	@RolesAllowed({"ADMIN"})
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +61,7 @@ public class ProductoResource {
 		}
 	}
 	
+	@RolesAllowed({"USER"})
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
@@ -68,7 +74,8 @@ public class ProductoResource {
 				return Response.ok(producto).build();
 			}else {
 				//agreguen algo de codigo para mostrar un msj mas lindo!
-				return Response.status(Status.NOT_FOUND).entity("Producto no encontrado").build();		
+				Map<Integer,String> error = contruirErroresValidacion(ProductoRestWSErrorEnum.ID_INEXISTENTE);
+				return Response.status(Status.NOT_FOUND).entity(error).build();		
 			}
 		}catch (ServiceException se) {
 			return Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -77,6 +84,7 @@ public class ProductoResource {
 		}
 	}
 	
+	@RolesAllowed({"ADMIN"})
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
@@ -102,6 +110,41 @@ public class ProductoResource {
 		}
 		
 	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response actualizrProducto(Producto producto) {
+		
+		Map<Integer, String> errores = new HashMap<Integer, String>();
+		//validaciones
+		if(producto.getId() == null && "".equals(producto.getCodigo())) {
+			Map<Integer, String> error = contruirErroresValidacion(ProductoRestWSErrorEnum.ID_INEXISTENTE);
+			errores.putAll(error);
+		}
+		if(producto.getPrecio() == null) {
+			Map<Integer, String> error = contruirErroresValidacion(ProductoRestWSErrorEnum.PRECIO);
+			errores.putAll(error);
+		}
+		if(producto.getTipoProducto() == null) {
+			Map<Integer, String> error = contruirErroresValidacion(ProductoRestWSErrorEnum.TIPO_PRODUCTO);
+			errores.putAll(error);
+		}
+		
+		if(!errores.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).entity(errores).build();
+		}
+		
+		try {
+			Producto productoActualizado = this.ps.updateProducto(producto);
+			return Response.ok(productoActualizado).build();
+		} catch (ServiceException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(contruirRespuestaErrores(e))
+					.build(); 
+		}
+	}
+	
 	
 	public Map<String, String> contruirRespuestaErrores(ServiceException se) {
 		Map<String, String> errores = new HashMap<String, String>();

@@ -16,4 +16,6 @@ public interface ProductoService {
 	public Producto getProductoById(Long id) throws ServiceException;
 
 	public Producto eliminarProducto(Long id) throws ServiceException;
+
+	public Producto updateProducto(Producto producto) throws ServiceException;
 }

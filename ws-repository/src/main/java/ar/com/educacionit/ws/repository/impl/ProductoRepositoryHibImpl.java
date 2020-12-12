@@ -123,4 +123,55 @@ public class ProductoRepositoryHibImpl extends HibernateBaseRepository implement
 		return producto;
 		
 	}
+
+	public Producto update(Producto producto) throws GenericExeption {
+	
+		try {
+			// return createProducto(producto);
+			Session session = factory.getCurrentSession();
+
+			try {
+				// All the action with DB via Hibernate
+				// must be located in one transaction.
+				// Start Transaction.
+				session.getTransaction().begin();
+
+				// Create an HQL statement, query the object.
+				String sql = "Select e from " + Producto.class.getName() + " e where e.codigo=:codigo ";
+
+				// Create Query object.
+				Query<Producto> query = session.createQuery(sql);
+				
+				query.setParameter("codigo", producto.getCodigo());
+
+				// Execute query.
+				Optional<Producto> productoOptional = query.uniqueResultOptional();
+
+				Producto productoBean = null;
+				if(productoOptional.isPresent()) {
+					productoBean = productoOptional.get();
+					productoBean.setTitulo(producto.getTitulo());
+					productoBean.setPrecio(producto.getPrecio());
+					productoBean.setTipoProducto(producto.getTipoProducto());
+				}
+
+				session.saveOrUpdate(productoBean);
+				
+				// Commit data.
+				session.getTransaction().commit();
+			}catch (ConstraintViolationException e) {
+				session.getTransaction().rollback();
+				throw new DuplicatedException(e.getCause().getMessage(),e);
+			} catch (Exception e) {
+				// Rollback in case of an error occurred.
+				session.getTransaction().rollback();
+				throw new GenericExeption(e.getMessage(),e);
+			}finally {
+				session.close();
+			}
+			return producto;
+		} catch (DuplicatedException e) {
+			throw new GenericExeption(e.getMessage(), e);
+		}
+	}
 }

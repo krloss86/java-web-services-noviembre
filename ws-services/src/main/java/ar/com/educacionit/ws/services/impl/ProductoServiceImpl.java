@@ -60,5 +60,11 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 	}
 	
-	
+	public Producto updateProducto(Producto producto) throws ServiceException {
+		try {
+			return this.productoRepository.update(producto);
+		}catch (GenericExeption e) {
+			throw new ServiceException(e.getMessage(),e);
+		}
+	}
 }
