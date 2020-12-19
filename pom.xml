@@ -9,7 +9,7 @@
   <!-- ENCODING PARA TODOS LOS PROYECTOS -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.surce>1.8</maven.compiler.surce>
+    <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   
@@ -19,5 +19,7 @@
     <module>ws-services</module>
     <module>ws-rest-producto-server</module>
     <module>ws-rest-client</module>
+    <module>ws-soap-server</module>
+    <module>ws-soap-client</module>
   </modules>
 </project>

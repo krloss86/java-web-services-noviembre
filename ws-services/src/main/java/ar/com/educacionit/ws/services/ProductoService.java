@@ -9,7 +9,7 @@ public interface ProductoService {
 
 	public Producto obtenerProducto(Long id);
 
-	public List<Producto> findProductos();
+	public List<Producto> findProductos() throws ServiceException;
 
 	public Producto nuevoProducto(Producto productoACrear) throws ServiceException;
 

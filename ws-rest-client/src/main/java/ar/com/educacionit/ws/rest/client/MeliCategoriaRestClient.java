@@ -12,12 +12,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import ar.com.educacionit.ws.domain.Producto;
+import ar.com.educacionit.ws.rest.dto.meli.CategoriaDetalle;
+import ar.com.educacionit.ws.rest.dto.meli.Site;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class MeliCategoriaRestClient 
 {
     public static void main( String[] args )
     {
@@ -25,7 +27,7 @@ public class App
     	Client client = ClientBuilder.newClient();
     	
     	//target
-    	WebTarget webTarget = client.target("http://localhost:8080/ws-rest-producto-server/api/productos");
+    	WebTarget webTarget = client.target("https://api.mercadolibre.com/categories/MLA5725");
     	
     	Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
     	
@@ -33,11 +35,9 @@ public class App
     	
     	if(Status.OK.getStatusCode() == response.getStatus()) {
     		
-    		GenericType<List<Producto>> productosEntityType = new GenericType<List<Producto>>() {};
+    		CategoriaDetalle categoriaDetalle = response.readEntity(CategoriaDetalle.class);
     		
-    		List<Producto> productos = response.readEntity(productosEntityType);
-    		
-    		System.out.println(productos);
+    		System.out.println(categoriaDetalle);
     	}
     }
 }

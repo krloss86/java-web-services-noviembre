@@ -33,8 +33,15 @@ public class ProductoResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findAllProductos() {
-		List<Producto> productos = ps.findProductos();
-		return Response.ok(productos).build();
+		List<Producto> productos;
+		try {
+			productos = ps.findProductos();
+			return Response.ok(productos).build();
+		} catch (ServiceException e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(contruirRespuestaErrores(e))
+					.build();
+		}
 	}
 	
 	@RolesAllowed({"ADMIN"})
